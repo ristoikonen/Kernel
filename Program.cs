@@ -37,14 +37,20 @@ public sealed class BasicFxKernel //(ITestOutputHelper output) : BaseTest(output
         kernelBuilder.Plugins.AddFromType<TimeInformation>();
         Kernel kernel = kernelBuilder.Build();
 
+        OpenAIPromptExecutionSettings settings = new() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() };
 
         // Example 2. Invoke the kernel with a templated prompt that invokes a plugin and display the result
-        Console.WriteLine(await kernel.InvokePromptAsync("The current time is {{TimeInformation.GetCurrentUtcTime}}. How many days until Christmas?"));
-        Console.WriteLine();
+        //Console.WriteLine(await kernel.InvokePromptAsync("The current time is {{TimeInformation.GetCurrentUtcTime}}. How many days until Christmas?"));
+        //Console.WriteLine();
 
 
-        OpenAIPromptExecutionSettings settings = new() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() };
-        Console.WriteLine(await kernel.InvokePromptAsync("How many days until Christmas? Explain your thinking.", new(settings)));
+        //OpenAIPromptExecutionSettings settings = new() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() };
+        //Console.WriteLine(await kernel.InvokePromptAsync("How many days until Christmas? Explain your thinking.", new(settings)));
+
+        // Example 4. Invoke the kernel with a prompt and allow the AI to automatically invoke functions that use enumerations
+        Console.WriteLine(await kernel.InvokePromptAsync("Create a handy lime colored widget for me.", new(settings)));
+        Console.WriteLine(await kernel.InvokePromptAsync("Create a beautiful scarlet colored widget for me.", new(settings)));
+        Console.WriteLine(await kernel.InvokePromptAsync("Create an attractive maroon and navy colored widget for me.", new(settings)));
 
 
         //Invoke the kernel with a prompt and display the result

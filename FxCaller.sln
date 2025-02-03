@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FxKernel", "FxKernel.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FxConsole", "..\FxConsole\FxConsole.csproj", "{DBE9B685-27D7-40EE-A400-22CAB8001A05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FxVectors", "..\FxVectors\FxVectors.csproj", "{657ACA8E-CB3D-4134-BFAD-3A5CA0441E1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DBE9B685-27D7-40EE-A400-22CAB8001A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBE9B685-27D7-40EE-A400-22CAB8001A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBE9B685-27D7-40EE-A400-22CAB8001A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{657ACA8E-CB3D-4134-BFAD-3A5CA0441E1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{657ACA8E-CB3D-4134-BFAD-3A5CA0441E1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{657ACA8E-CB3D-4134-BFAD-3A5CA0441E1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{657ACA8E-CB3D-4134-BFAD-3A5CA0441E1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
