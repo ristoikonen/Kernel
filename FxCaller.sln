@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35521.163 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kernel", "Kernel.csproj", "{C43D2CCE-3EE0-4DDD-8E8D-AC9280A0D8CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FxKernel", "FxKernel.csproj", "{C43D2CCE-3EE0-4DDD-8E8D-AC9280A0D8CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FxConsole", "..\FxConsole\FxConsole.csproj", "{DBE9B685-27D7-40EE-A400-22CAB8001A05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C43D2CCE-3EE0-4DDD-8E8D-AC9280A0D8CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C43D2CCE-3EE0-4DDD-8E8D-AC9280A0D8CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C43D2CCE-3EE0-4DDD-8E8D-AC9280A0D8CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBE9B685-27D7-40EE-A400-22CAB8001A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBE9B685-27D7-40EE-A400-22CAB8001A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBE9B685-27D7-40EE-A400-22CAB8001A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBE9B685-27D7-40EE-A400-22CAB8001A05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

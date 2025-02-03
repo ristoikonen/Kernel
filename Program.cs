@@ -5,47 +5,55 @@
 using System.ComponentModel;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Xunit;
 
-#pragma warning disable SKEXP0070 //  chat completion connector is currently experimental.
+namespace FxKernel;
+
+#pragma warning disable SKEXP0070 // Chat completion connector is currently experimental.
 #pragma warning disable SKEXP0001 // AsChatCompletionService
 
-// These variables are needed to access the Ollama Models
-Uri modelEndpoint = new("http://localhost:11434");
-//string modelName = "deepseek-r1:1.5b";
-string modelName = "llama3.2";
+public sealed class BasicFxKernel //(ITestOutputHelper output) : BaseTest(output)
+{
+    [Fact]
+    public async Task CreateKernelAsync()
+    {
+        Uri modelEndpoint = new("http://localhost:11434");
+        //string modelName = "deepseek-r1:1.5b";
+        string modelName = "llama3.2";
 
-//.AddOpenAIChatCompletion(
-//    modelId: TestConfiguration.OpenAI.ChatModelId,
-//    apiKey: TestConfiguration.OpenAI.ApiKey)
+        //.AddOpenAIChatCompletion(
+        //    modelId: TestConfiguration.OpenAI.ChatModelId,
+        //    apiKey: TestConfiguration.OpenAI.ApiKey)
 
-// Create a kernel with OpenAI chat completion
-//Kernel kernel = Kernel.CreateBuilder()
-//    .AddOllamaChatCompletion(modelName, modelEndpoint)
-//    .Build();
-
-
-IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
-kernelBuilder.AddOllamaChatCompletion(modelName, modelEndpoint);
-
-kernelBuilder.Plugins.AddFromType<TimeInformation>();
-Kernel kernel = kernelBuilder.Build();
+        // Create a kernel with OpenAI chat completion
+        //Kernel kernel = Kernel.CreateBuilder()
+        //    .AddOllamaChatCompletion(modelName, modelEndpoint)
+        //    .Build();
 
 
-// Example 2. Invoke the kernel with a templated prompt that invokes a plugin and display the result
-Console.WriteLine(await kernel.InvokePromptAsync("The current time is {{TimeInformation.GetCurrentUtcTime}}. How many days until Christmas?"));
-Console.WriteLine();
+        IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
+        kernelBuilder.AddOllamaChatCompletion(modelName, modelEndpoint);
+
+        kernelBuilder.Plugins.AddFromType<TimeInformation>();
+        Kernel kernel = kernelBuilder.Build();
 
 
-OpenAIPromptExecutionSettings settings = new() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() };
-Console.WriteLine(await kernel.InvokePromptAsync("How many days until Christmas? Explain your thinking.", new(settings)));
+        // Example 2. Invoke the kernel with a templated prompt that invokes a plugin and display the result
+        Console.WriteLine(await kernel.InvokePromptAsync("The current time is {{TimeInformation.GetCurrentUtcTime}}. How many days until Christmas?"));
+        Console.WriteLine();
 
 
-//Invoke the kernel with a prompt and display the result
-//Console.WriteLine(await kernel.InvokePromptAsync("What color is the sky?"));
-//Console.WriteLine();
-// Console.WriteLine(string.Empty);
+        OpenAIPromptExecutionSettings settings = new() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() };
+        Console.WriteLine(await kernel.InvokePromptAsync("How many days until Christmas? Explain your thinking.", new(settings)));
 
 
+        //Invoke the kernel with a prompt and display the result
+        //Console.WriteLine(await kernel.InvokePromptAsync("What color is the sky?"));
+        //Console.WriteLine();
+        // Console.WriteLine(string.Empty);
+    }
+
+}
 
 /// <summary>
 /// A plugin that returns the current time.

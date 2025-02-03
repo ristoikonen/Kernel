@@ -3,16 +3,16 @@
 
 ## Function calling with chat completion. 
 
-#### Install models using **Ollama run libraryname**
 #### Command line use, type: Kernel
 
 ### Notes
 - Targeting AI-automation of sample business processes
 - Command line application that uses the Semantic Kernel to interact with a model.
 - .NET 9.0,  C#  
-- Models installed using **Ollama run**, running in localhost PORT_NBR_HERE, using CPU .
+- Install models using **Ollama run libraryname**, running in localhost 11434, using CPU .
 - Uses latest **prerelease libraries** of Microsoft.Extensions.AI.Ollama and Microsoft.SemanticKernel.Connectors.Ollama
-
+- Need help choosing library? Check function calling board at: https://gorilla.cs.berkeley.edu/leaderboard.html. Note that Deepseek-chat models function calling is **unstable** atm... https://api-docs.deepseek.com/guides/function_calling
+- 
 ## Steps to use functions in the application
  
 | NUMBER      | STEP | Description     | How to code     |
