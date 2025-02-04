@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <h1>Here is the liquid HTML for Black Beans with nutritional information:</h1>
+
+    <div class="nutritional-facts">
+        <h2>Nutritional Information</h2>
+
+        <ul>
+            <li>Calories: {{ ingredient.calories | round:2 }}</li>
+            <li>Protein: {{ ingredient.protein | round:2 }}g</li>
+            <li>Fat: {{ ingredient.fat | round:2 }}g</li>
+            <li>Sodium: {{ ingredient.sodium | round:2 }}mg</li>
+            <li>Cooking Time: {{ ingredient.cooking_time }}</li>
+        </ul>
+
+        <h3>Amino Acids:</h3>
+        <ul>
+            {% for amino_acid in ingredient.amino_acids %}
+            <li>{{ amino_acid.name }}: {{ amino_acid.amount | round:4 }}g</li>
+            {% endfor %}
+        </ul>
+
+        {% if nutrientData %}
+        <script src="https://cdn.jsdelivr.net/npm/google-nutrient-api@1.0.5/nutrients.min.js"></script>
+        <script>
+      var nutrient = {
+        'name': '{{ ingredient.name }}',
+        'servings': {{ ingredient.servings }}
+      };
+
+      google.nutrientAPI.lookup(nutrient).then(response => {
+        var data = response.data;
+        console.log(data);
+
+        // display the nutritional information
+        var nutritionList = document.getElementById('nutrition-list');
+        for (var i = 0; i < data.length; i++) {
+          var li = document.createElement('li');
+          li.textContent = data[i].name + ': ' + data[i].amount;
+          nutritionList.appendChild(li);
+        }
+      });
+        </script>
+        {% endif %}
+    </div>
+
+    {{ ingredient | jsonify }}
+
+</body>
+</html>

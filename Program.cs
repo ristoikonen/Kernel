@@ -74,7 +74,7 @@ public sealed class BasicFxKernel
             },
             { "history", new[]
                 {
-                    new { role = "user", content = "Can you tell me what amino acids do black beans have?" },
+                    new { role = "user", content = "Can you tell me what amino acids do black beans and peas have?" },
                 }
             },
         };
@@ -97,32 +97,15 @@ public sealed class BasicFxKernel
         var function = kernel.CreateFunctionFromPrompt(promptTemplateConfig, templateFactory);
         var response = await kernel.InvokeAsync(function, arguments);
         Console.WriteLine(response);
+        Console.WriteLine(string.Empty);
 
 
         // Example 2. Invoke the kernel with a templated prompt that invokes a plugin and display the result
         //Console.WriteLine(await kernel.InvokePromptAsync("The current time is {{TimeInformation.GetCurrentUtcTime}}. How many days until Christmas?"));
         //Console.WriteLine();
-
-
-        //OpenAIPromptExecutionSettings settings = new() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() };
-        //Console.WriteLine(await kernel.InvokePromptAsync("How many days until Christmas? Explain your thinking.", new(settings)));
-
-        // Example 4. Invoke the kernel with a prompt and allow the AI to automatically invoke functions that use enumerations
-        ////Console.WriteLine(await kernel.InvokePromptAsync("Create a handy lime colored widget for me.", new(settings)));
-        // Console.WriteLine(await kernel.InvokePromptAsync("Create a beautiful scarlet colored widget for me.", new(settings)));
-
-
-
-        //Console.WriteLine(await kernel.InvokePromptAsync("Create an attractive maroon and navy colored widget for me.", new(settings)));
-
-
-        //Invoke the kernel with a prompt and display the result
-        //Console.WriteLine(await kernel.InvokePromptAsync("What color is the sky?"));
-        //Console.WriteLine();
-        // Console.WriteLine(string.Empty);
     }
-
 }
+
 
 /// <summary>
 /// A plugin that returns the current time.
