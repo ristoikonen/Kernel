@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SemanticKernel.PromptTemplates.Liquid;
 using Xunit;
 
 namespace FxKernel;
@@ -12,32 +13,91 @@ namespace FxKernel;
 #pragma warning disable SKEXP0070 // Chat completion connector is currently experimental.
 #pragma warning disable SKEXP0001 // AsChatCompletionService
 
-public sealed class BasicFxKernel //(ITestOutputHelper output) : BaseTest(output)
+public sealed class BasicFxKernel
 {
+    private Uri ModelEndpoint { get; set; }
+    private string ModelName { get; set; }
+
+    public BasicFxKernel(Uri modelEndpoint, string modelName)
+    {
+        this.ModelEndpoint = modelEndpoint;
+        this.ModelName = modelName;
+    }
+
     [Fact]
     public async Task CreateKernelAsync()
     {
-        Uri modelEndpoint = new("http://localhost:11434");
-        //string modelName = "deepseek-r1:1.5b";
-        string modelName = "llama3.2";
-
-        //.AddOpenAIChatCompletion(
-        //    modelId: TestConfiguration.OpenAI.ChatModelId,
-        //    apiKey: TestConfiguration.OpenAI.ApiKey)
-
-        // Create a kernel with OpenAI chat completion
-        //Kernel kernel = Kernel.CreateBuilder()
-        //    .AddOllamaChatCompletion(modelName, modelEndpoint)
-        //    .Build();
-
-
         IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
-        kernelBuilder.AddOllamaChatCompletion(modelName, modelEndpoint);
+        kernelBuilder.AddOllamaChatCompletion(this.ModelName, this.ModelEndpoint);
 
         kernelBuilder.Plugins.AddFromType<TimeInformation>();
         Kernel kernel = kernelBuilder.Build();
 
         OpenAIPromptExecutionSettings settings = new() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() };
+
+        // Prompt template using Liquid syntax
+        string template = """
+            <message role="system">
+            You are an AI agent for the Food Chemistry website. As the agent, you generate liquid HTML for food items,  
+                in a scientific manner using provided Website liquid HTML template and by generating nutritional information data of food item in JSON format and showing it. 
+            Instructions: List the amounts of essential amino acids in messages food item.
+             Verify amounts using Google plugin.</message>
+            
+            <message role="user">Can you tell me what amino acids do black beans have? 
+            </message>
+            
+            <message role="assistant">
+            Black beans, amino acids per 100g: Tryptophan 0.105g, Threonine 0.373 g.
+            </message>
+            
+
+            # Website Context
+            <message role="{{fooditem.name}}"
+             <ul>
+              {% for aminoacid in aminoacids %}
+                <li>
+                  <h2>{{ aminoacid.name }}</h2>
+                  {{ aminoacid.amount | prettyprint | paragraph }}
+                    </message>
+                </li>
+              {% endfor %}
+            </ul>
+            """;
+
+        var arguments = new KernelArguments()
+        {
+            { "fooditem", new
+                {
+                    name = "Black beans",
+                    aminoacids = "",
+                }
+            },
+            { "history", new[]
+                {
+                    new { role = "user", content = "Can you tell me what amino acids do black beans have?" },
+                }
+            },
+        };
+
+        // Create the prompt template using liquid format
+        var templateFactory = new LiquidPromptTemplateFactory();
+        var promptTemplateConfig = new PromptTemplateConfig()
+        {
+            Template = template,
+            TemplateFormat = "liquid",
+            Name = "FoodChemistryChatPrompt",
+        };
+
+        // Render the prompt
+        var promptTemplate = templateFactory.Create(promptTemplateConfig);
+        var renderedPrompt = await promptTemplate.RenderAsync(kernel, arguments);
+        Console.WriteLine($"Rendered Prompt:\n{renderedPrompt}\n");
+
+
+        var function = kernel.CreateFunctionFromPrompt(promptTemplateConfig, templateFactory);
+        var response = await kernel.InvokeAsync(function, arguments);
+        Console.WriteLine(response);
+
 
         // Example 2. Invoke the kernel with a templated prompt that invokes a plugin and display the result
         //Console.WriteLine(await kernel.InvokePromptAsync("The current time is {{TimeInformation.GetCurrentUtcTime}}. How many days until Christmas?"));
@@ -48,9 +108,12 @@ public sealed class BasicFxKernel //(ITestOutputHelper output) : BaseTest(output
         //Console.WriteLine(await kernel.InvokePromptAsync("How many days until Christmas? Explain your thinking.", new(settings)));
 
         // Example 4. Invoke the kernel with a prompt and allow the AI to automatically invoke functions that use enumerations
-        Console.WriteLine(await kernel.InvokePromptAsync("Create a handy lime colored widget for me.", new(settings)));
-        Console.WriteLine(await kernel.InvokePromptAsync("Create a beautiful scarlet colored widget for me.", new(settings)));
-        Console.WriteLine(await kernel.InvokePromptAsync("Create an attractive maroon and navy colored widget for me.", new(settings)));
+        ////Console.WriteLine(await kernel.InvokePromptAsync("Create a handy lime colored widget for me.", new(settings)));
+        // Console.WriteLine(await kernel.InvokePromptAsync("Create a beautiful scarlet colored widget for me.", new(settings)));
+
+
+
+        //Console.WriteLine(await kernel.InvokePromptAsync("Create an attractive maroon and navy colored widget for me.", new(settings)));
 
 
         //Invoke the kernel with a prompt and display the result
